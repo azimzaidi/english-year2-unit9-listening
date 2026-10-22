@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Beach Day! Year 2 English</title>
+<style>
+:root{--bg:#e8f8ff;--ink:#16324f;--card:#fff;--pri:#ff7a3d;--ok:#27ae60;--bad:#e74c3c;--blue:#1fa7e0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10263a;--ink:#f2f9ff;--card:#1b3a56}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Baloo 2","Comic Sans MS","Trebuchet MS",system-ui,sans-serif;font-size:20px;min-height:100%}
+header{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:10px 14px;flex-wrap:wrap}
+h1{font-size:1.4rem;margin:0}
+.stars{background:var(--card);border-radius:30px;padding:6px 14px;font-weight:700}
+.bar{height:14px;background:#0002;border-radius:9px;margin:0 14px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd93b,#ff7a3d);transition:width .5s}
+nav{display:flex;gap:8px;padding:10px 14px;overflow-x:auto}
+nav button{flex:1;min-width:84px;font:inherit;font-weight:700;font-size:.9rem;border:3px solid transparent;border-radius:16px;background:var(--card);color:var(--ink);padding:8px 4px;cursor:pointer}
+nav button.on{border-color:var(--pri);background:#fff3d6;color:#16324f}
+nav button b{display:block;font-size:1.5rem}
+main{max-width:760px;margin:0 auto;padding:6px 14px 30px}
+.card{background:var(--card);border-radius:22px;padding:14px;box-shadow:0 4px 0 #0002;margin-bottom:12px}
+.q{font-size:1.45rem;font-weight:800;text-align:center;margin:4px 0 10px}
+.btn{font:inherit;font-weight:800;font-size:1.15rem;border:0;border-radius:18px;padding:12px 20px;min-height:54px;background:var(--pri);color:#fff;cursor:pointer;box-shadow:0 4px 0 #0003}
+.btn:active{transform:translateY(3px);box-shadow:none}
+.btn.blue{background:var(--blue)}.btn.green{background:var(--ok)}.btn.red{background:var(--bad)}
+.btn:disabled{opacity:.4}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.scene{position:relative;container-type:inline-size;aspect-ratio:400/260;border-radius:18px;overflow:hidden;border:4px solid #fff;box-shadow:0 3px 0 #0003;touch-action:manipulation}
+.scene svg{position:absolute;inset:0;width:100%;height:100%}
+.it{position:absolute;transform:translate(-50%,-50%);font-size:11cqw;line-height:1;user-select:none;-webkit-user-select:none;background:none;border:0;padding:0;cursor:pointer}
+.tray{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:10px;background:#fff6;border-radius:18px;min-height:84px;position:relative;z-index:5;margin-top:10px;border:3px dashed #1fa7e0}
+.tray .it{position:relative;transform:none;font-size:56px;cursor:grab;touch-action:none;background:#fff;border-radius:16px;width:74px;height:74px;display:grid;place-items:center;box-shadow:0 3px 0 #0003}
+.it.drag{z-index:99;cursor:grabbing;filter:drop-shadow(0 8px 6px #0005);scale:1.15}
+.scene .it[data-drag]{touch-action:none;cursor:grab}
+.msg{min-height:2.2em;text-align:center;font-weight:800;font-size:1.3rem}
+.good{color:var(--ok)}.oops{color:var(--bad)}
+.shake{animation:sh .4s}@keyframes sh{25%{translate:-10px 0}75%{translate:10px 0}}
+.pulse{animation:pu .9s infinite}@keyframes pu{50%{scale:1.3}}
+.pop{animation:po .6s}@keyframes po{50%{scale:1.5}}
+.frame{font-size:1.7rem;font-weight:800;text-align:center;margin:8px 0}
+.frame u{color:var(--pri)}
+.small{font-size:.8rem;opacity:.8;text-align:center}
+input{font:inherit;font-size:1.1rem;padding:10px;border-radius:12px;border:3px solid var(--blue);width:100%;max-width:260px}
+.big{font-size:4rem;text-align:center}
+ul.s{list-style:none;padding:0;font-size:1.2rem}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body>
+<header><h1>🏖️ Beach Day!</h1><div class="stars" id="stars">⭐ 0</div></header>
+<div class="bar"><i id="bar"></i></div>
+<nav id="nav"></nav>
+<main id="app"></main>
+<script>
+const $=s=>document.querySelector(s);
+const SVG=`<svg viewBox="0 0 400 260" preserveAspectRatio="none"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fbdff"/><stop offset="1" stop-color="#cdf2ff"/></linearGradient><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b9fe0"/><stop offset="1" stop-color="#63d3f2"/></linearGradient></defs><rect width="400" height="100" fill="url(#a)"/><circle cx="345" cy="36" r="21" fill="#ffd93b"/><ellipse cx="80" cy="34" rx="34" ry="12" fill="#fff"/><ellipse cx="105" cy="26" rx="22" ry="10" fill="#fff"/><ellipse cx="220" cy="60" rx="30" ry="9" fill="#fff"/><rect y="100" width="400" height="66" fill="url(#b)"/><path d="M0 120 q15-8 30 0t30 0t30 0t30 0t30 0t30 0t30 0t30 0t30 0t30 0t30 0t30 0t30 0" stroke="#fff8" stroke-width="3" fill="none"/><path d="M0 166 Q50 150 100 166 T200 166 T300 166 T400 166 V260 H0Z" fill="#ffe08a"/><rect x="296" y="150" width="5" height="64" fill="#8a5a2b"/><path d="M258 158 Q298 112 338 158Z" fill="#ff5d73"/><path d="M298 124 L283 156 M298 124 L313 156" stroke="#fff" stroke-width="4"/><circle cx="40" cy="230" r="3" fill="#e8c26a"/><circle cx="150" cy="240" r="3" fill="#e8c26a"/><circle cx="240" cy="225" r="3" fill="#e8c26a"/></svg>`;
+const E={boat:'⛵',bucket:'🪣',kite:'🪁',ball:'⚽',crab:'🦀',shell:'🐚',fish:'🐟',palm:'🌴'};
+const N={boat:'boat',bucket:'bucket',kite:'kite',ball:'ball',crab:'crab'};
+const FIX={boat:[25,50],kite:[68,17],ball:[76,80],bucket:[45,82],crab:[14,84]};
+const SEA=[0,100,40,62],SKY=[0,100,0,36],SAND=[0,100,68,100],UMB=[62,92,66,94];
+const T1=['boat','kite','ball','bucket','crab'];
+const T2=[{k:'boat',t:'Put the boat in the sea.',z:SEA},{k:'kite',t:'Put the kite in the sky.',z:SKY},{k:'bucket',t:'Put the bucket on the sand.',z:SAND},{k:'ball',t:'Put the ball under the umbrella.',z:UMB}];
+const T3=[{k:'boat',t:'The boat is in the sea.',w:'in the sea'},{k:'kite',t:'The kite is in the sky.',w:'in the sky'},{k:'ball',t:'The ball is under the umbrella.',w:'under the umbrella'},{k:'bucket',t:'The bucket is on the sand.',w:'on the sand'},{k:'crab',t:'The crab is on the sand.',w:'on the sand'}];
+const TOT=[5,4,5,1];let P=[0,0,0,0],step=0,last='',name='',picSent=[];
+try{const s=JSON.parse(localStorage.getItem('beach')||'{}');name=s.n||''}catch(e){}
+const GOOD=['Great job!','Well done!','Super!','Fantastic!','You did it!','Brilliant!'];
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+function speak(t){last=t;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-GB';u.rate=.8;u.pitch=1.1;speechSynthesis.speak(u)}catch(e){}}
+function msg(t,c){const m=$('#msg');if(m){m.textContent=t;m.className='msg '+(c||'')}}
+function upd(){const s=P.reduce((a,b)=>a+b,0),t=TOT.reduce((a,b)=>a+b,0);$('#stars').textContent='⭐ '+s;$('#bar').style.width=(s/t*100)+'%';
+ try{localStorage.setItem('beach',JSON.stringify({n:name,p:P}))}catch(e){}}
+function nav(){$('#nav').innerHTML=['👀|Look & Say','👂|Listen & Place','🗣️|Look & Speak','🎨|My Beach','🏆|My Stars'].map((x,i)=>{const[a,b]=x.split('|');return`<button class="${i==step?'on':''}" onclick="go(${i})"><b>${a}</b>${b}</button>`}).join('')}
+function go(i){step=i;try{speechSynthesis.cancel()}catch(e){}nav();[v1,v2,v3,v4,v5][i]();scrollTo(0,0)}
+const scene=(id,inner='')=>`<div class="scene" id="${id}">${SVG}${inner}</div>`;
+const fixed=(ks,cls)=>ks.map(k=>`<button class="it ${cls||''}" data-k="${k}" style="left:${FIX[k][0]}%;top:${FIX[k][1]}%" aria-label="${k}">${E[k]}</button>`).join('');
+const done=(i)=>{P[i]++;upd()};
+const replay=()=>`<button class="btn blue" onclick="speak(last)">🔊 Listen again</button>`;
+function inZ(x,y,z){return x>=z[0]&&x<=z[1]&&y>=z[2]&&y<=z[3]}
+function pct(cx,cy){const r=$('.scene').getBoundingClientRect();const x=(cx-r.left)/r.width*100,y=(cy-r.top)/r.height*100;return{x,y,in:x>=0&&x<=100&&y>=0&&y<=100}}
+function drag(el,cb){el.onpointerdown=e=>{e.preventDefault();el.setPointerCapture(e.pointerId);const sx=e.clientX,sy=e.clientY;el.classList.add('drag');
+ el.onpointermove=m=>{el.style.translate=`${m.clientX-sx}px ${m.clientY-sy}px`};
+ el.onpointerup=()=>{el.onpointermove=el.onpointerup=null;const r=el.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;el.classList.remove('drag');el.style.translate='';cb(cx,cy)}}}
+function shake(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}
+
+/* 1 Look and Say */
+function v1(){let i=0;
+ const ask=()=>{if(i>=T1.length){$('#app').innerHTML=`<div class="card"><div class="big">🎉</div><div class="q">You found everything!</div><div class="row"><button class="btn green" onclick="go(1)">Next game ➜</button></div></div>`;speak('You found everything! Well done!');return}
+  $('#q').textContent='Where is the '+N[T1[i]]+'?';speak('Where is the '+N[T1[i]]+'? Tap it!');msg('')};
+ $('#app').innerHTML=`<div class="card"><div class="q" id="q"></div>${scene('sc',fixed(T1))}<div class="msg" id="msg"></div><div class="row">${replay()}</div></div>`;
+ document.querySelectorAll('.scene .it').forEach(b=>b.onclick=()=>{if(i>=T1.length)return;
+  if(b.dataset.k==T1[i]){b.classList.add('pop');done(0);const w='Yes! It is a '+N[T1[i]]+'.';msg('⭐ '+rnd(GOOD),'good');speak(w);i++;setTimeout(ask,2200)}
+  else{shake(b);msg('Try again!','oops');speak('Try again. Where is the '+N[T1[i]]+'?')}});
+ ask()}
+
+/* 2 Listen and Place */
+function v2(){let i=0;
+ const tray=()=>`<div class="tray" id="tray">${T2.map(t=>`<div class="it" data-k="${t.k}">${E[t.k]}</div>`).join('')}</div>`;
+ $('#app').innerHTML=`<div class="card"><div class="q" id="q">👂 Listen!</div>${scene('sc')}${tray()}<div class="msg" id="msg"></div><div class="row">${replay()}</div></div>`;
+ const next=()=>{if(i>=T2.length){$('#q').textContent='🎉 All done!';msg('Amazing listening!','good');speak('Amazing listening! You put everything in the right place.');$('.row').innerHTML=`<button class="btn green" onclick="go(2)">Next game ➜</button>`;return}
+  $('#q').textContent=T2[i].t;speak(T2[i].t);msg('')};
+ document.querySelectorAll('#tray .it').forEach(el=>drag(el,(cx,cy)=>{if(i>=T2.length)return;const p=pct(cx,cy),t=T2[i];
+  if(p.in&&el.dataset.k==t.k&&inZ(p.x,p.y,t.z)){el.remove();$('#sc').insertAdjacentHTML('beforeend',`<div class="it pop" style="left:${p.x}%;top:${p.y}%">${E[t.k]}</div>`);done(1);i++;const m=rnd(GOOD);msg('⭐ '+m,'good');speak(m);setTimeout(next,1500)}
+  else{shake(el);msg(el.dataset.k==t.k?'Not there. Try again!':'Listen carefully!','oops');setTimeout(()=>speak(t.t),700)}}));
+ next()}
+
+/* 3 Look and Speak */
+let rec=null,url=null;
+function v3(){let i=0;
+ const draw=()=>{const t=T3[i],w=t.w;
+  $('#app').innerHTML=`<div class="card"><div class="q">Listen, then say it!</div>${scene('sc',fixed(T3.map(x=>x.k).filter((k,j,a)=>a.indexOf(k)==j)))}
+  <div class="frame">The ${t.k} is <u>${w}</u>.</div><div class="msg" id="msg"></div>
+  <div class="row"><button class="btn blue" onclick="speak('${t.t}')">🔊 Listen</button><button class="btn red" id="rb" onclick="recToggle()">🎤 Record me</button><button class="btn" id="pb" disabled onclick="new Audio(url).play()">▶️ My voice</button></div>
+  <div class="row"><button class="btn green" id="ok">I said it! ✔</button></div><div class="small">Recording stays on this device only and is not saved.</div></div>`;
+  const b=document.querySelector(`.scene .it[data-k="${t.k}"]`);b.classList.add('pulse');b.style.zIndex=5;speak(t.t);
+  $('#ok').onclick=()=>{done(2);i++;if(i>=T3.length){$('#app').innerHTML=`<div class="card"><div class="big">🗣️🎉</div><div class="q">Great speaking!</div><div class="row"><button class="btn green" onclick="go(3)">Next game ➜</button></div></div>`;speak('Great speaking!');return}
+   msg('');draw()}};
+ url=null;draw()}
+async function recToggle(){const rb=$('#rb');
+ if(rec&&rec.state=='recording'){rec.stop();return}
+ try{const s=await navigator.mediaDevices.getUserMedia({audio:true});const ch=[];rec=new MediaRecorder(s);
+  rec.ondataavailable=e=>ch.push(e.data);
+  rec.onstop=()=>{s.getTracks().forEach(t=>t.stop());url=URL.createObjectURL(new Blob(ch,{type:rec.mimeType}));rb.textContent='🎤 Record again';$('#pb').disabled=false;msg('Press ▶️ to hear you!','good')};
+  rec.start();rb.textContent='⏹ Stop';msg('Speak now…')}
+ catch(e){msg('No microphone. Just say it out loud!','oops')}}
+
+/* 4 My Beach Picture */
+function v4(){
+ const tray=Object.keys(E).map(k=>`<div class="it" data-k="${k}">${E[k]}</div>`).join('');
+ $('#app').innerHTML=`<div class="card"><div class="q">Make your beach! 🎨</div>${scene('sc')}<div class="tray" id="tray">${tray}</div>
+ <div class="msg" id="msg">Drag things onto the beach. Drag out to remove.</div>
+ <div class="row"><input id="nm" placeholder="My name" value="${name}" maxlength="20" aria-label="My name"></div>
+ <div class="row"><button class="btn green" onclick="submitPic()">✅ I am finished!</button></div></div>`;
+ speak('Make your own beach picture. Drag things onto the beach.');
+ document.querySelectorAll('#tray .it').forEach(el=>drag(el,(cx,cy)=>{const p=pct(cx,cy);if(!p.in){shake(el);return}addIt(el.dataset.k,p.x,p.y)}))}
+function addIt(k,x,y){const d=document.createElement('div');d.className='it pop';d.dataset.k=k;d.dataset.drag=1;d.textContent=E[k];d.style.left=x+'%';d.style.top=y+'%';$('#sc').appendChild(d);
+ drag(d,(cx,cy)=>{const p=pct(cx,cy);if(!p.in)d.remove();else{d.style.left=p.x+'%';d.style.top=p.y+'%'}})}
+function where(x,y){return inZ(x,y,UMB)?'under the umbrella':inZ(x,y,SKY)?'in the sky':inZ(x,y,SEA)?'in the sea':inZ(x,y,SAND)?'on the sand':null}
+function submitPic(){const items=[...document.querySelectorAll('#sc .it')];
+ if(items.length<3){msg('Add 3 or more things!','oops');speak('Add three or more things to your beach.');return}
+ name=$('#nm').value.trim();picSent=[];const seen={};
+ items.forEach(d=>{const w=where(parseFloat(d.style.left),parseFloat(d.style.top));if(w&&!seen[d.dataset.k]){seen[d.dataset.k]=1;picSent.push(`The ${d.dataset.k} is ${w}.`)}});
+ P[3]=1;upd();const html=$('#sc').outerHTML;
+ $('#app').innerHTML=`<div class="card"><div class="q">${name?name+'’s':'My'} beach picture</div>${html}<ul class="s">${picSent.map(s=>`<li>💬 ${s}</li>`).join('')}</ul>
+ <div class="row"><button class="btn blue" onclick="speak(picSent.join(' '))">🔊 Read to me</button><button class="btn green" onclick="go(4)">🏆 My Stars</button></div><div class="small">Show your picture to your teacher!</div></div>`;
+ speak('Well done! Now say your sentences. '+picSent.join(' '))}
+
+/* Summary */
+function v5(){const s=P.reduce((a,b)=>a+b,0),t=TOT.reduce((a,b)=>a+b,0),n=['Look & Say','Listen & Place','Look & Speak','My Beach'];
+ const all=s>=t;
+ $('#app').innerHTML=`<div class="card"><div class="big">${all?'🏆':'⭐'}</div><div class="q">${name?name+', ':''}${all?'you are a Beach Star!':'keep going!'}</div>
+ <div class="q">⭐ ${s} / ${t}</div><ul class="s">${n.map((x,i)=>`<li>${P[i]>=TOT[i]?'✅':'⬜'} ${x} <small>(${P[i]}/${TOT[i]})</small></li>`).join('')}</ul>
+ <div class="row"><button class="btn" onclick="P=[0,0,0,0];upd();go(0)">🔄 Play again</button></div></div>`;
+ speak(all?'Well done! You are a Beach Star!':'Good work! Keep going.')}
+nav();upd();$('#app').innerHTML=`<div class="card"><div class="big">🏖️</div><div class="q">Let’s go to the beach!</div><div class="row"><button class="btn green" onclick="go(0)">▶️ Start</button></div></div>`;
+</script></body></html>
